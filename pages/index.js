@@ -1,65 +1,85 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { Logo } from './../components';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import {
+  Container,
+  Box,
+  Input,
+  Button,
+  Text,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+} from '@chakra-ui/react';
+
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email('E-mail inválido')
+    .required('Preenchimento obrigatório'),
+  password: yup.string().required('Preenchimento obrigatório'),
+  username: yup.string().required('Preenchimento obrigatório'),
+});
 
 export default function Home() {
+  const formik = useFormik({
+    onSubmit: () => {},
+    validationSchema,
+    initialValues: {
+      email: '',
+      username: '',
+      password: '',
+    },
+  });
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+    <Container p={4} centerContent>
+      <Logo />
+      <Box p={4} mt={8}>
+        <Text>Crie sua agenda compartilhada</Text>
+      </Box>
+      <Box>
+        <FormControl id="email" p={4} isRequired>
+          <FormLabel>Email</FormLabel>
+          <Input
+            type="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          <FormHelperText textColor="e74c3c">
+            {formik.errors.email}
+          </FormHelperText>
+        </FormControl>
+        <FormControl id="password" p={4} isRequired>
+          <FormLabel>Senha</FormLabel>
+          <Input
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          <FormHelperText textColor="e74c3c">
+            {formik.errors.password}
+          </FormHelperText>
+        </FormControl>
+        <Box display="flex" flexDirection="row" alignItems="center">
+          <Text>clocker.work/</Text>
+          <FormControl id="username" p={4} isRequired>
+            <Input
+              type="username"
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <FormHelperText textColor="e74c3c">
+              {formik.errors.username}
+            </FormHelperText>
+          </FormControl>
+        </Box>
+        <Box p={4}>
+          <Button width="100%">Entrar</Button>
+        </Box>
+      </Box>
+    </Container>
+  );
 }
