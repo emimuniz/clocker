@@ -10,6 +10,8 @@ import {
   FormControl,
   FormLabel,
   FormHelperText,
+  InputGroup,
+  InputLeftAddon,
 } from '@chakra-ui/react';
 
 const validationSchema = yup.object().shape({
@@ -22,8 +24,18 @@ const validationSchema = yup.object().shape({
 });
 
 export default function Home() {
-  const formik = useFormik({
-    onSubmit: () => {},
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    isSubmitting,
+  } = useFormik({
+    onSubmit: (values, form) => {
+      console.log(values);
+    },
     validationSchema,
     initialValues: {
       email: '',
@@ -42,42 +54,56 @@ export default function Home() {
           <FormLabel>Email</FormLabel>
           <Input
             type="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
-          <FormHelperText textColor="e74c3c">
-            {formik.errors.email}
-          </FormHelperText>
+          {touched.email && (
+            <FormHelperText textColor="e74c3c">{errors.email}</FormHelperText>
+          )}
         </FormControl>
         <FormControl id="password" p={4} isRequired>
           <FormLabel>Senha</FormLabel>
           <Input
             type="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
-          <FormHelperText textColor="e74c3c">
-            {formik.errors.password}
-          </FormHelperText>
+          {touched.password && (
+            <FormHelperText textColor="e74c3c">
+              {errors.password}
+            </FormHelperText>
+          )}
         </FormControl>
-        <Box display="flex" flexDirection="row" alignItems="center">
-          <Text>clocker.work/</Text>
-          <FormControl id="username" p={4} isRequired>
+
+        <FormControl id="username" p={4} isRequired>
+          <InputGroup>
+            <InputLeftAddon children="clocker.work/" />
             <Input
               type="username"
-              value={formik.values.username}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              value={values.username}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
+          </InputGroup>
+
+          {touched.username && (
             <FormHelperText textColor="e74c3c">
-              {formik.errors.username}
+              {errors.username}
             </FormHelperText>
-          </FormControl>
-        </Box>
+          )}
+        </FormControl>
+
         <Box p={4}>
-          <Button width="100%">Entrar</Button>
+          <Button
+            width="100%"
+            colorScheme="blue"
+            onClick={handleSubmit}
+            isLoading={isSubmitting}
+          >
+            Entrar
+          </Button>
         </Box>
       </Box>
     </Container>
